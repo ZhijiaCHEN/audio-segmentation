@@ -4,4 +4,5 @@ Segment video clip based on silent intervals.
 `python video-segmentation.py target`
 ## Dependency
 numpy
+
 moviepy
