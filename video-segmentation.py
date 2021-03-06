@@ -40,11 +40,9 @@ def max_filter(signal, winSize):
         ret[i] = max(signal[i:i+winSize])
     return ret
 
-winSize = int(0.5 * fps) # set average window size to 0.5s
+winSize = int(0.5 * fps) # set window size to 0.5s
 absSignal = average_filter(absSignal, winSize)
-
 # absSignal = max_filter(absSignal, winSize)
-time = np.array(range(1, len(absSignal) + 1)) * (1/fps/60)
 
 # detect silence
 sth = 0.001# silence threshold
