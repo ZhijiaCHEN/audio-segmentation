@@ -10,7 +10,7 @@ numpy, moviepy
 Recognize faces in the target video and extract shots for each role based on the clustered faces.
 
 ## Usage
-`python leading-cast.py target`
+`python shots-clustering.py target`
 
 ## Dependency
 numpy, moviepy, face_recognition, imutils, sklearn, opencv-python, [google-cloud-videointelligence](https://github.com/googleapis/python-videointelligence)
