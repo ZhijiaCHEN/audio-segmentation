@@ -1,4 +1,4 @@
-# Video Segmentation
+# 1. Video Segmentation
 Segment video clip based on silent intervals.
 ## Usage
 `python video-segmentation.py target`
@@ -6,8 +6,8 @@ Segment video clip based on silent intervals.
 ## Dependency
 numpy, moviepy
 
-# Leading Casts Extraction
-Recognize faces in the target video and extract shots for each main role based on the clustered faces.
+# 2. Shots Clustering
+Recognize faces in the target video and extract shots for each role based on the clustered faces.
 
 ## Usage
 `python leading-cast.py target`
