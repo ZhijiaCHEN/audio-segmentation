@@ -4,19 +4,16 @@ Segment video clip based on silent intervals.
 `python video-segmentation.py target`
 
 ## Dependency
-numpy
-
-moviepy
+numpy, moviepy
 
 # Leading Casts Extraction
-Recognize faces in the target video and extract shots for the main casts based on the showing time.
-Face clustering and intervals merging to be done.
+Recognize faces in the target video and extract shots for each main role based on the clustered faces.
+
 ## Usage
 `python leading-cast.py target`
 
 ## Dependency
-numpy
+numpy, moviepy, face_recognition, imutils, sklearn, opencv-python, [google-cloud-videointelligence](https://github.com/googleapis/python-videointelligence)
 
-moviepy
-
-[google-cloud-videointelligence](https://github.com/googleapis/python-videointelligence)
+## Acknowledgement
+Implementation of [face encoding and clustering](face.py) are adapted from [Face-Clustering](https://github.com/kunalagarwal101/Face-Clustering).

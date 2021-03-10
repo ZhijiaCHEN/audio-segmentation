@@ -1,3 +1,7 @@
 numpy
 moviepy
 google-cloud-videointelligence
+face_recognition
+imutils
+sklearn
+opencv-python
