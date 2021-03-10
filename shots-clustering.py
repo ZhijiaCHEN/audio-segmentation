@@ -15,7 +15,7 @@ clip = mp.VideoFileClip(file)
 shutil.rmtree(FACE_DATA_PATH, ignore_errors=True)
 os.mkdir(FACE_DATA_PATH)
 
-def detect_faces(local_file_path=None, gcs_uri=None):
+def detect_shots_faces(local_file_path=None, gcs_uri=None):
     """Detects faces in a video from a local file."""
 
     client = videointelligence.VideoIntelligenceServiceClient()
@@ -58,9 +58,9 @@ def detect_faces(local_file_path=None, gcs_uri=None):
     shotAnnotation, faceAnnotation = result.annotation_results[0].shot_annotations, result.annotation_results[0].face_detection_annotations
     return (shotAnnotation, faceAnnotation)
 
-(shotAnnotation, faceAnnotation) = detect_faces(local_file_path=file)
+(shotAnnotation, faceAnnotation) = detect_shots_faces(local_file_path=file)
 
-# chop each shot
+# retrieve the time interval for each shot
 shots = []
 for i, shot in enumerate(shotAnnotation):
     start_time = (
@@ -73,9 +73,10 @@ for i, shot in enumerate(shotAnnotation):
     shots.append((start_time, end_time))
 shots.sort()
 
+# retreive the thumbnails of the detected faces
 faceThresh = 0.05 # ignore faces that below the size threshold
 faceIdx = 0
-faceTimestamp = {} # For each face track, assignment a timestamp to the face using average time offset of the track. This timestamp will be used to find shot that contains the face track
+faceTimestamp = {} # For each face track, assignment a timestamp to the face using the average time offset of the track. This timestamp will be used to find the shot that contains the face track
 for annotation in faceAnnotation:
     for track in annotation.tracks:
         box0 = track.timestamped_objects[0].normalized_bounding_box
@@ -86,19 +87,9 @@ for annotation in faceAnnotation:
         faceTimestamp[faceIdx] = (segStart + segEnd) / 2
         with open(os.path.join(FACE_DATA_PATH, "{}.jpg".format(faceIdx)), "wb") as fh:
             fh.write(annotation.thumbnail)
-        
-        # #ffmpeg_extract_subclip(file, segStart, segEnd, targetname="{}-face-{}.mp4".format('.'.join(file.split('.')[:-1]), i))
-
-        # for i, timedObj in enumerate(track.timestamped_objects):
-        #     box = timedObj.normalized_bounding_box
-        #     t = timedObj.time_offset.seconds + timedObj.time_offset.microseconds / 1e6
-        #     frame = clip.get_frame(t)
-        #     (h, w, _) = frame.shape
-            
-        #     face = Image.fromarray(frame[max(int(box.top*h) - 10, 0):min(int(box.bottom*h) + 10, h), max(int(box.left*w) - 10, 0):min(int(box.right*w)+10, w)])
-        #     face.save("{}-face-{}-{}.png".format('.'.join(file.split('.')[:-1]), faceCnt, i))
         faceIdx += 1
 
+# face and shot clustering
 faceData = encode_face(FACE_DATA_PATH)
 faceCluster = cluster_face(faceData)
 for faceID in faceCluster:
